@@ -7,6 +7,7 @@ import library.interfaces.entities.EBookState;
 import library.interfaces.entities.IBook;
 import library.interfaces.entities.ILoan;
 import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 
 public class BookJavaTest implements IBook
 {
