@@ -107,6 +107,11 @@ public class Book implements IBook
 		return state;
 	}
 
+	public void setState(EBookState state)
+	{
+		this.state = state;
+	}
+
 	public String getAuthor()
 	{
 		return author;
@@ -126,4 +131,5 @@ public class Book implements IBook
 	{
 		return ID;
 	}
+
 }
