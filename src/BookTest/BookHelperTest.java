@@ -36,7 +36,7 @@ public class BookHelperTest
 	@Test
 	public void makingBookTest()
 	{
-		testBook_ = testHelper_.makeBook("name", "title", "phoneNumber", 117);
+		testBook_ = testHelper_.makeBook("name", "title", "callNumber", 117);
 		assertTrue(testBook_ instanceof IBook);
 	}
 }

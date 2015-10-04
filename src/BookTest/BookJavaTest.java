@@ -23,12 +23,12 @@ public class BookJavaTest
 	@Before
 	public void setUp() throws Exception
 	{
-		testData_ = new Book("name", "title", "phoneNumber", 117);
+		testData_ = new Book("name", "title", "callNumber", 117);
 		testLoan_ = mock(ILoan.class);
 	}
 	
 	@After
-	public void breakDown() throws Exception
+	public void emptyData() throws Exception
 	{
 		testData_ = null;
 	}
@@ -41,12 +41,12 @@ public class BookJavaTest
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testDataAuthorInvalid(){
-		testData_ = new Book(null, "title", "phoneNumber", 117);
+		testData_ = new Book(null, "title", "callNumber", 117);
 	}
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testDataTitleInvalid(){
-		testData_ = new Book("name", null, "phoneNumber", 117);
+		testData_ = new Book("name", null, "callNumber", 117);
 	}
 
 	@Test (expected = IllegalArgumentException.class)
@@ -56,7 +56,7 @@ public class BookJavaTest
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testDataInvalidID(){
-		testData_ = new Book("name", "title", "phoneNumber", -1);
+		testData_ = new Book("name", "title", "callNumber", -1);
 	}
 	
 	@Test(expected = RuntimeException.class)
@@ -74,42 +74,177 @@ public class BookJavaTest
 	}
 
 	@Test
-	public void testBorrowThrowsRuntimeException()
+	public void testBorrowLoan()
 	{
-		ILoan testLoan = null;
-		testData_.setState(EBookState.AVAILABLE);
-		
-		try
-		{
-			testData_.borrow(testLoan);
-			fail("ERR: Missing Runtime Exception");
-		}
-		
-		catch(RuntimeException e)
-		{
-			assertTrue(true);
-		}	
+		testData_.borrow(null);
 	}
-
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testBorrowOnLoan()
+	{
+		testData_.borrow(testLoan_);
+		testData_.borrow(testLoan_);
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void testGetLoan()
+	{
+		testData_.borrow(testLoan_);
+		assertTrue(testData_.getLoan() == testLoan_);
+	}
+	
 	@Test
-	public void testReturnBookFalse()
+	public void testGetLoanAvailable()
+	{
+		assertTrue(testData_.getLoan() == null);
+	}
+	
+	@Test
+	public void testBookReturnUndamaged()
 	{
 		testData_.borrow(testLoan_);
 		testData_.returnBook(false);
-		
-		assertEquals("The 'State' needs to be changed to 'Available'", EBookState.AVAILABLE, testData_.getState());
+		assertEquals(EBookState.AVAILABLE, testData_.getState());
 	}
 	
-	@Test
-	public void testReturnBookTrue()
-	{
-		testData_.borrow(testLoan_);
-		testData_.returnBook(true);
-		
-		assertEquals("The 'State' needs to be changed to 'Damaged'", EBookState.DAMAGED, testData_.getState());
-	}
-	
-	///
-	
-	
+	  @Test
+	  public void testBookReturnDamaged()
+	  {
+	    testData_.borrow(testLoan_);
+	    testData_.returnBook(true);
+	    assertEquals(EBookState.DAMAGED, testData_.getState());
+	  }
+	  
+	  @Test
+	  public void testBookReturnRemovedLoan()
+	  {
+		  testData_.borrow(testLoan_);
+		  testData_.returnBook(false);
+		  assertEquals(EBookState.AVAILABLE, testData_.getState());
+		  assertTrue(testData_.getLoan() == null);
+	  }
+	  
+	  @Test(expected = RuntimeException.class)
+	  public void testBookReturnAvailable()
+	  {
+	    testData_.returnBook(false);
+	  }
+	  
+	  @Test
+	  public void testLose()
+	  {
+	    testData_.borrow(testLoan_);
+	    testData_.lose();
+	    assertEquals(EBookState.LOST, testData_.getState());
+	  }
+	  
+	  @Test(expected = RuntimeException.class)
+	  public void testLoseAvailable()
+	  {
+	    testData_.lose();
+	  }
+	  
+	  
+	  @Test
+	  public void testRepair()
+	  {
+	    testData_.borrow(testLoan_);
+	    testData_.returnBook(true);
+	    testData_.repair();
+	    assertEquals(EBookState.AVAILABLE, testData_.getState());
+	  }
+	  
+	  
+	  @Test(expected = RuntimeException.class)
+	  public void testRepairUndamaged()
+	  {
+	    testData_.repair();
+	  }
+
+	  @Test
+	  public void testDispose() 
+	  {
+	    testData_.dispose();
+	    assertEquals(EBookState.DISPOSED, testData_.getState());
+	  }
+	  
+	  @Test(expected = RuntimeException.class)
+	  public void testDisposeUnavailable()
+	  {
+	    testData_.borrow(testLoan_);
+	    testData_.dispose();
+	  }
+	  
+	  
+	  @Test(expected = RuntimeException.class)
+	  public void testDisposeAlreadyDisposed()
+	  {
+	    testData_.dispose();
+	    assertEquals(EBookState.DISPOSED, testData_.getState());
+	    testData_.dispose();
+	  }
+	  
+	  @Test
+	  public void testGetStateAvailablility()
+	  {
+	    assertEquals(EBookState.AVAILABLE, testData_.getState());
+	  }
+	  
+	  
+	  @Test
+	  public void testGetStateOnLoan()
+	  {
+	    testData_.borrow(testLoan_);
+	    assertEquals(EBookState.ON_LOAN, testData_.getState());
+	  }
+	  
+	  
+	  @Test
+	  public void testGetStateDamaged()
+	  {
+	    testData_.borrow(testLoan_);
+	    testData_.returnBook(true);
+	    assertEquals(EBookState.DAMAGED, testData_.getState());
+	  }
+	  
+	  
+	  @Test
+	  public void testGetStateLost()
+	  {
+	    testData_.borrow(testLoan_);
+	    testData_.lose();
+	    assertEquals(EBookState.LOST, testData_.getState());
+	  }
+	  
+	  
+	  @Test
+	  public void testGetStateDisposed()
+	  {
+	    testData_.dispose();
+	    assertEquals(EBookState.DISPOSED,  testData_.getState());
+	  }
+
+	  @Test
+	  public void testGetAuthor()
+	  {
+	    assertEquals("author", testData_.getAuthor());
+	  }
+
+	  @Test
+	  public void testGetTitle()
+	  {
+	    assertEquals("title", testData_.getTitle());
+	  }
+
+	  @Test
+	  public void testGetCallNumber()
+	  {
+	    assertEquals("callNumber", testData_.getCallNumber());
+	  }
+	  
+	  @Test
+	  public void testGetID()
+	  {
+	    assertEquals(117, testData_.getID());
+	  }
 }
