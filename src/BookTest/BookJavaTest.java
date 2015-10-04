@@ -23,12 +23,12 @@ public class BookJavaTest
 	@Before
 	public void setUp() throws Exception
 	{
-		testData_ = new Book("name", "title", "callNumber", 117);
+		testData_ = new Book("author", "title", "callNumber", 117);
 		testLoan_ = mock(ILoan.class);
 	}
 	
 	@After
-	public void emptyData() throws Exception
+	public void reset() throws Exception
 	{
 		testData_ = null;
 	}
@@ -46,17 +46,17 @@ public class BookJavaTest
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testDataTitleInvalid(){
-		testData_ = new Book("name", null, "callNumber", 117);
+		testData_ = new Book("author", null, "callNumber", 117);
 	}
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testDataCallNumberInvalid(){
-		testData_ = new Book("name", "title", null, 117);
+		testData_ = new Book("author", "title", null, 117);
 	}
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testDataInvalidID(){
-		testData_ = new Book("name", "title", "callNumber", -1);
+		testData_ = new Book("author", "title", "callNumber", -1);
 	}
 	
 	@Test(expected = RuntimeException.class)

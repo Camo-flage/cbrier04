@@ -27,7 +27,7 @@ public class BookHelperTest
 	}
 	
 	@After
-	public void breakDown() throws Exception
+	public void reset() throws Exception
 	{
 		testHelper_ = null;
 		testBook_ = null;

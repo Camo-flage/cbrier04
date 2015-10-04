@@ -4,7 +4,6 @@
 package BookTest;
 
 import library.daos.BookMapDAO;
-import library.entities.Book;
 import library.interfaces.daos.IBookDAO;
 import library.interfaces.daos.IBookHelper;
 import library.interfaces.entities.IBook;
@@ -35,7 +34,7 @@ public class BookMapTest
 	  }
 	  
 	  @After
-	  public void emptyData() throws Exception
+	  public void reset() throws Exception
 	  {
 		  bookMap_ = null;
 		  testHelper_ = null;
