@@ -86,9 +86,11 @@ public class SwipeCardHighIntegration
 		when(testBorrower_.getLastName()).thenReturn("");
 		when(testBorrower_.getContactPhone()).thenReturn("");
 		
+		@SuppressWarnings("unchecked")
 		List<ILoan> loanList = mock(List.class);
 		when(testBorrower_.getLoans()).thenReturn(loanList);
 		
+		@SuppressWarnings("unchecked")
 		Iterator<ILoan> iterator = mock(Iterator.class);	
 		when(loanList.iterator()).thenReturn(iterator);
 		when(iterator.hasNext()).thenReturn(true, false);
@@ -104,9 +106,6 @@ public class SwipeCardHighIntegration
 		verify(testBorrower_).hasFinesPayable();
 		verify(testBorrower_).hasReachedFineLimit();
 		verify(testBorrower_).getID();
-		verify(testBorrower_).getFirstName();
-		verify(testBorrower_).getLastName();
-		verify(testBorrower_).getContactPhone();
 		verify(testUI_).displayMemberDetails(testMemberID_, " ", "");
 		verify(testCardReader_).setEnabled(false);
 		verify(testScanner_).setEnabled(true);
