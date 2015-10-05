@@ -19,7 +19,7 @@ public class Book implements IBook
 
 	public Book(String author, String title, String callNumber, int ID) 
 	{
-		if (author != null && !author.isEmpty() && title != null && !title.isEmpty() && callNumber != null && !callNumber.isEmpty() && ID > 0)
+		if (author == null || author.isEmpty() || title == null || title.isEmpty() || callNumber == null || callNumber.isEmpty() || ID < 0)
 		{
 			throw new IllegalArgumentException("Constructor contains bad parameters");
 		}
